@@ -1,0 +1,15 @@
+import network
+import time
+
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+wlan.ifconfig(('192.168.0.26', '255.255.255.0', '192.168.0.1', '8.8.8.8'))
+
+while not wlan.isconnected():
+    try:
+        wlan.connect("ssid", "pass")
+        print(f"Aktualny status Wi-Fi: {wlan.isconnected()}")
+        time.sleep(10)
+    except Exception as e:
+        print(f"Coś poszło nie tak: {e}, ale próbuję jeszcze raz")
+        time.sleep(10)

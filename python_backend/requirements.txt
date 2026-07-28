@@ -1,0 +1,6 @@
+flask
+dotenv
+pymongo
+requests
+openai
+google-genai

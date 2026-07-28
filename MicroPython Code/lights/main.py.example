@@ -1,0 +1,40 @@
+from microdot import Microdot
+from functionality import Output
+import urequests as requests
+import asyncio
+
+app = Microdot()
+lights = Output(pin=18)
+turn_on = False
+
+async def ask_backend():
+    global turn_on
+    if turn_on == False:
+        lights.turn_off()
+    while turn_on:
+        try:
+            response = requests.get("http://")
+            
+            if response.text == "light_on":
+                lights.turn_on()
+            if response.text == "light_off":
+                lights.turn_off()
+        except:
+            await asyncio.sleep(5)
+        await asyncio.sleep(30)
+    return "Finished"
+
+@app.route('/', methods=['POST'])
+async def light(request):
+    global turn_on
+    data = request.json
+    turn_on = data["turn_on"]
+    await ask_backend()
+
+@app.route('/check', methods=['GET'])
+async def check(request):
+    return "Ok"
+    
+
+app.run(host="0.0.0.0",port=80)
+    
