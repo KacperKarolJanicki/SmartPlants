@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.5.5
   path_provider: ^2.1.6
+  syncfusion_flutter_charts: ^34.1.33
   backend_connection:
     path: C:/my_flutter_libs/backend_connection/
 

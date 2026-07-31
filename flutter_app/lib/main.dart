@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:esp32_module/views/analitics/analytics.dart';
 import 'package:esp32_module/views/settings/settings.dart';
 import 'package:esp32_module/widget_components/pomp_toolbar.dart';
 import 'package:esp32_module/widget_components/sensor_percentage_toolbar.dart';
@@ -176,10 +177,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                           }
                                       ) : SizedBox.shrink()
                                     ]),
-                                    AppStyleButton(buttonText: 'Settings', icon: Icon(Icons.settings), onPressed: (){
-                                      ScaffoldMessenger.of(context).clearSnackBars();
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>AppSettings()));
-                                    })
+                                    OverflowBar(
+                                        spacing: 5,
+                                        children: [
+                                      AppStyleButton(buttonText: 'Settings', icon: Icon(Icons.settings), onPressed: (){
+                                        ScaffoldMessenger.of(context).clearSnackBars();
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AppSettings()));
+                                      }),
+                                      AppStyleButton(buttonText: 'Analytics', icon: Icon(Icons.analytics), onPressed: (){
+                                        ScaffoldMessenger.of(context).clearSnackBars();
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Analytics()));
+                                      })
+                                    ])
                                   ]))
                       );
                     },
