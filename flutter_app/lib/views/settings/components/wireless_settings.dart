@@ -4,12 +4,15 @@ import 'package:esp32_module/widget_components/container_widget.dart';
 import 'package:esp32_module/widget_components/text_field.dart';
 import 'package:flutter/material.dart';
 
+import '../../../function_components/connection.dart';
+
 String pumpDeviceIP = '';
 String lightsDeviceIP = '';
 
 Future<void> getIP() async {
   pumpDeviceIP = await LocalDataStorage('pump_ip').getData('');
   lightsDeviceIP = await LocalDataStorage('lights_ip').getData('');
+  host = await LocalDataStorage('main_host').getData('');
 }
 
 class WirelessSettings extends StatefulWidget {
@@ -24,12 +27,30 @@ class _WirelessSettingsState extends State<WirelessSettings> {
   @override
   Widget build (BuildContext context){
     return ContainerWidget(
-        height: MediaQuery.of(context).size.height / 2.25,
+        height: MediaQuery.of(context).size.height / 1.75,
         width: MediaQuery.of(context).size.width-50,
     spacing: 30,
     children: [
+      Text('Main host: $host'),
       Text('Pump device IP: $pumpDeviceIP'),
       Text('Light device IP: $lightsDeviceIP'),
+      OverflowBar(spacing:10, children: [
+        AppStyleTextField(width: 200, labelText: 'Main host', icon: Icon(Icons.wifi),
+            onChanged: (input){
+              setState(() {
+                host = 'https://$input';
+              });
+            }),
+        AppStyleButton(buttonText: 'Save', fontSize:10, onPressed: (){
+          LocalDataStorage('main_host').setData(host);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.green.shade200,
+              content: Text('Saved',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 20, color: Colors.black))));
+        })
+      ]),
       OverflowBar(spacing:10, children: [
         AppStyleTextField(width: 200, labelText: 'Pump device IP 💧', icon: Icon(Icons.wifi),
             onChanged: (input){
