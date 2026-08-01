@@ -13,25 +13,31 @@ app = Flask(__name__)
 
 @app.route("/ground_data", methods=["GET","POST"])
 def ground_data():
-    authorization()
+    # authorization()
+
+    device_ip = request.headers.get('deviceIp')
+
     if request.method == "GET":
-        response = requests.get("http://192.168.0.26")
+        response = requests.get(device_ip)
         return response.json()
     if request.method == "POST":
         data = request.get_json()
-        response = requests.post("http://192.168.0.26", json=data)
+        response = requests.post(device_ip, json=data)
         return response.json()
 
 
 @app.route("/light", methods=["POST","GET"])
 def light():
+
+    device_ip = request.headers.get('deviceIp')
+
     if request.method == "GET":
         result = manual_steering.light_steering()
         return result
     if request.method == "POST":
-        authorization()
+        # authorization()
         data = request.get_json()
-        response = requests.post("http://192.168.0.27", json=data)
+        response = requests.post(device_ip, json=data)
         return "Ok"
     
 @app.route("/plants_data", methods=["GET"])
