@@ -20,7 +20,7 @@ class _ChartState extends State<Chart> {
   Widget build(BuildContext context) {
 
     double chartSize = MediaQuery.of(context).size.width / 1.3;
-    double scaleSpacing = MediaQuery.of(context).size.height / 25;
+    // double scaleSpacing = MediaQuery.of(context).size.height / 25;
 
     return PompToolbar(
       pompID: widget.sensor.replaceAll('sensor_voltage_', 'water_pomp_'),
@@ -30,13 +30,13 @@ class _ChartState extends State<Chart> {
           shape: RoundedRectangleBorder(side: BorderSide(width: 0.3))),
           child: Column(children: [
             OverflowBar(children: [
-              Column(
-                  spacing: scaleSpacing,
-                  children: [
-                    Text('Wet'),
-                    Text('Semi-Wet'),
-                    Text('Dry'),
-                  ]),
+              // Column(
+              //     spacing: scaleSpacing,
+              //     children: [
+              //       Text('Wet'),
+              //       Text('Semi-Wet'),
+              //       Text('Dry'),
+              //     ]),
               SizedBox(width: chartSize, child: SfSparkLineChart(
                 labelDisplayMode: widget.lastResults == 6
                     ? SparkChartLabelDisplayMode.all
@@ -54,7 +54,7 @@ class _ChartState extends State<Chart> {
             OverflowBar(
                 spacing: widget.lastResults == 12 ? 7 : widget.lastResults == 6 ? 39 : 2,
                 children: [
-                  SizedBox(width: widget.lastResults == 24 ? scaleSpacing + 25 : scaleSpacing),
+                  // SizedBox(width: widget.lastResults == 24 ? scaleSpacing + 25 : scaleSpacing),
                   for(var j in widget.data.take(widget.lastResults).toList().reversed.toList())
                     Text('${DateTime.parse(j['datetime']).toLocal().hour}:${DateTime.parse(j['datetime']).toLocal().minute}',
                       style: TextStyle(fontSize: widget.lastResults == 24 ? 4 : 7),)

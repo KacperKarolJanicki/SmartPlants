@@ -1,4 +1,5 @@
 import 'package:esp32_module/function_components/local_data_storage.dart';
+import 'package:esp32_module/views/settings/components/wireless_settings.dart';
 import 'package:esp32_module/widget_components/sensor_percentage_toolbar.dart';
 import 'package:flutter/material.dart';
 import '../../widget_components/button.dart';
@@ -14,6 +15,7 @@ class AppSettings extends StatefulWidget {
 class _AppSettingsState extends State<AppSettings> {
 
   bool voltageSettings = false;
+  bool wirelessSettings = false;
   final Size settingsButtonSize = Size(300, 40);
 
   @override
@@ -71,9 +73,25 @@ class _AppSettingsState extends State<AppSettings> {
                   });
                 },
               ),
-              AppStyleButton(buttonText: 'Auto mode: off', fontSize: 14, minSize: settingsButtonSize,
-                icon: Image.asset('assets/images/autoOFF.png', width: 70)
-              )
+              wirelessSettings ? WirelessSettings() : AppStyleButton(
+                  minSize: settingsButtonSize,
+                  buttonText: 'Wireless settings',
+                  icon: Icon(Icons.wifi),
+                  fontSize: 13,
+                  onPressed: () {
+                    setState(() {
+                      wirelessSettings = !wirelessSettings;
+                    });
+                  }),
+              wirelessSettings ? AppStyleButton(
+                  buttonText: 'Close', icon: Icon(Icons.close), onPressed: () {
+                setState(() {
+                  wirelessSettings = !wirelessSettings;
+                });
+              }) : SizedBox.shrink(),
+              // AppStyleButton(buttonText: 'Auto mode: off', fontSize: 14, minSize: settingsButtonSize,
+              //   icon: Image.asset('assets/images/autoOFF.png', width: 70)
+              // )
             ])]));
   }
 }

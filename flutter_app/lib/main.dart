@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:esp32_module/views/analitics/analytics.dart';
+import 'package:esp32_module/views/settings/components/wireless_settings.dart';
 import 'package:esp32_module/views/settings/settings.dart';
 import 'package:esp32_module/widget_components/pomp_toolbar.dart';
 import 'package:esp32_module/widget_components/sensor_percentage_toolbar.dart';
@@ -40,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       isLoading = true;
     });
-    fromSensorsData = await backend.download('$host/ground_data', '$host/ground_data').whenComplete((){
+    fromSensorsData = await backend.download('$host/ground_data', '$host/ground_data', headers: {'deviceIp':pumpDeviceIP}).whenComplete((){
       setState(() {
         isLoading = false;
       });
@@ -50,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    connection();
+    getIP().whenComplete((){connection();});
   }
 
   @override
@@ -68,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: .center,
                 children: [
                   isLoading ? CircularProgressIndicator(color: Colors.green) :
-                  ContainerWidget(
+                  pumpDeviceIP.replaceAll('http://', '').isNotEmpty ? ContainerWidget(
                       width: 325, height: 525, scrollable: true,
                       children: [
                         SizedBox(height: 10),
@@ -106,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               voltageId: 'sensor_voltage_4',
                               stateId: 'sensor_4_ground'),
                         )
-                      ]),
+                      ]) : WirelessSettings(),
                   AppStyleButton(
                     buttonText: 'More',
                     fontSize: 10,
@@ -128,14 +129,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                           AppStyleButton(onPressed: () {
                                             backend.send(
                                                 '$host/light', '$host/light',
-                                                data: {"turn_on": true});
+                                                data: {"turn_on": true}, headers: {'deviceIP':lightsDeviceIP});
                                           },
                                               buttonText: "On",
                                               icon: Icon(Icons.lightbulb)),
                                           AppStyleButton(onPressed: () {
                                             backend.send(
                                                 '$host/light', '$host/light',
-                                                data: {"turn_on": false});
+                                                data: {"turn_on": false}, headers: {'deviceIP':lightsDeviceIP});
                                           },
                                               buttonText: "Off",
                                               icon: Icon(
@@ -156,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             fromSensorsData =
                                             await backend.download(
                                                 '$host/ground_data',
-                                                '$host/ground_data');
+                                                '$host/ground_data', headers: {'deviceIp':pumpDeviceIP});
                                             setState(() {
                                               percentageLoading = false;
                                             });
@@ -170,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             backend.sendNReturn(
                                                 "$host/ground_data",
                                                 "$host/ground_data",
-                                                data: pompsData).whenComplete(() {
+                                                data: pompsData, headers: {'deviceIp':pumpDeviceIP}).whenComplete(() {
                                               connection();
                                               pompsData.clear();
                                             });

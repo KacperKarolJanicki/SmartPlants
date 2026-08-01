@@ -42,6 +42,7 @@ class _AnalyticsState extends State<Analytics> {
         centerTitle: true,
         backgroundColor: Colors.green.shade200,
         toolbarHeight: 100,
+        automaticallyImplyLeading: false,
       ),
       body: isLoading ? Center(child: CircularProgressIndicator()) : ListView(
           children: [
