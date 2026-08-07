@@ -75,7 +75,6 @@ async def ground_data(request):
             if water_sensor_4.voltage_data() <= pomp_4_state["dry_voltage"] and pomp_4_state['pomp_time'] < 180:
                 water_pomp_4.set_timer(t=pomp_4_state['pomp_time'])
                 time.sleep(1)
-                
         return sensors_data
 
     
