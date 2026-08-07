@@ -1,4 +1,5 @@
 import 'package:esp32_module/function_components/local_data_storage.dart';
+import 'package:esp32_module/views/settings/components/automatics.dart';
 import 'package:esp32_module/views/settings/components/wireless_settings.dart';
 import 'package:esp32_module/widget_components/sensor_percentage_toolbar.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class _AppSettingsState extends State<AppSettings> {
 
   bool voltageSettings = false;
   bool wirelessSettings = false;
+  bool automaticsSettings = false;
   final Size settingsButtonSize = Size(300, 40);
 
   @override
@@ -87,6 +89,22 @@ class _AppSettingsState extends State<AppSettings> {
                   buttonText: 'Close', icon: Icon(Icons.close), onPressed: () {
                 setState(() {
                   wirelessSettings = !wirelessSettings;
+                });
+              }) : SizedBox.shrink(),
+              automaticsSettings ? Automatics() : AppStyleButton(
+                  minSize: settingsButtonSize,
+                  buttonText: 'Automatics',
+                  icon: Icon(Icons.auto_mode),
+                  fontSize: 13,
+                  onPressed: () {
+                    setState(() {
+                      automaticsSettings = !automaticsSettings;
+                    });
+                  }),
+              automaticsSettings ? AppStyleButton(
+                  buttonText: 'Close', icon: Icon(Icons.close), onPressed: () {
+                setState(() {
+                  automaticsSettings = !automaticsSettings;
                 });
               }) : SizedBox.shrink(),
               // AppStyleButton(buttonText: 'Auto mode: off', fontSize: 14, minSize: settingsButtonSize,

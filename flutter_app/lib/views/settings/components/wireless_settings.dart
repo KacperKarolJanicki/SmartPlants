@@ -3,7 +3,6 @@ import 'package:esp32_module/widget_components/button.dart';
 import 'package:esp32_module/widget_components/container_widget.dart';
 import 'package:esp32_module/widget_components/text_field.dart';
 import 'package:flutter/material.dart';
-
 import '../../../function_components/connection.dart';
 
 String pumpDeviceIP = '';
@@ -36,6 +35,7 @@ class _WirelessSettingsState extends State<WirelessSettings> {
       Text('Light device IP: $lightsDeviceIP'),
       OverflowBar(spacing:10, children: [
         AppStyleTextField(width: 200, labelText: 'Main host', icon: Icon(Icons.wifi),
+            keyboardType: TextInputType.text,
             onChanged: (input){
               setState(() {
                 host = 'https://$input';

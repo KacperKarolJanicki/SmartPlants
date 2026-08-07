@@ -162,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               percentageLoading = false;
                                             });
                                           }),
-                                      pompsData.isNotEmpty ? AppStyleButton(
+                                      pumpsData.isNotEmpty ? AppStyleButton(
                                           minSize: (Size(80, 40)),
                                           buttonText: 'Start',
                                           fontSize: 10,
@@ -171,9 +171,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                             backend.sendNReturn(
                                                 "$host/ground_data",
                                                 "$host/ground_data",
-                                                data: pompsData, headers: {'deviceIp':pumpDeviceIP}).whenComplete(() {
+                                                data: pumpsData, headers: {'deviceIp':pumpDeviceIP}).whenComplete(() {
                                               connection();
-                                              pompsData.clear();
+                                              pumpsData.clear();
                                             });
                                           }
                                       ) : SizedBox.shrink()

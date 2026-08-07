@@ -4,16 +4,17 @@ import 'package:esp32_module/widget_components/sensor_percentage_toolbar.dart';
 import 'package:esp32_module/widget_components/text_field.dart';
 import 'package:flutter/material.dart';
 
-Map<String,dynamic> pompsData = {};
+Map<String,dynamic> pumpsData = {};
 
 class PompToolbar extends StatefulWidget {
   final String pompLabel;
   final String pompID;
   final Widget? otherWidget;
   final bool functionButtons;
+  final bool labelButton;
 
   const PompToolbar(
-      {super.key, this.pompLabel = 'Some Pomp', required this.pompID, this.otherWidget, this.functionButtons=true});
+      {super.key, this.pompLabel = 'Some Pomp', required this.pompID, this.otherWidget, this.functionButtons=true, this.labelButton=true});
 
   @override
   State<PompToolbar> createState() => _PompToolbarState();
@@ -90,7 +91,7 @@ class _PompToolbarState extends State<PompToolbar> {
                     height: 30,
                     onChanged: (input) {
                       setState(() {
-                        pompsData[widget.pompID]['pomp_time'] =
+                        pumpsData[widget.pompID]['pomp_time'] =
                             int.tryParse(input) ?? 0;
                       });
                     },
@@ -104,7 +105,7 @@ class _PompToolbarState extends State<PompToolbar> {
                   onPressed: () {
                     setState(() {
                       _turnOn = !_turnOn;
-                      pompsData.remove(widget.pompID);
+                      pumpsData.remove(widget.pompID);
                     });
                   },
                 )
@@ -120,7 +121,7 @@ class _PompToolbarState extends State<PompToolbar> {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       setState(() {
                         _turnOn = !_turnOn;
-                        pompsData.addAll({
+                        pumpsData.addAll({
                           widget.pompID: {
                             "turn_on": _turnOn,
                             "pomp_time": 0,
@@ -130,7 +131,7 @@ class _PompToolbarState extends State<PompToolbar> {
                         });
                       });
                     }):SizedBox.shrink(),
-                widget.functionButtons ? AppStyleButton(
+                widget.labelButton ? widget.functionButtons ? AppStyleButton(
                     buttonText: 'Label', minSize: Size(30, 30),
                     icon: Icon(Icons.edit, size: 10),
                     fontSize: 10,
@@ -138,7 +139,7 @@ class _PompToolbarState extends State<PompToolbar> {
                       setState(() {
                         _turnLabel=!_turnLabel;
                       });
-                    }):SizedBox.shrink(),
+                    }):SizedBox.shrink():SizedBox.shrink(),
               ]),
           SizedBox(height: 10),
           widget.otherWidget ?? SizedBox.shrink(),
