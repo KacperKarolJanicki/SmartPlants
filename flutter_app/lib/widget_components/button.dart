@@ -23,7 +23,7 @@ class AppStyleButton extends StatelessWidget {
     return ElevatedButton.icon(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green.shade50,
+          backgroundColor: Colors.green.shade50.withAlpha(190),
           foregroundColor: Colors.black,
           maximumSize: maxSize,
           minimumSize: minSize,

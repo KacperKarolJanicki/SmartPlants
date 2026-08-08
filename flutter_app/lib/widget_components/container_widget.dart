@@ -28,7 +28,7 @@ class _ContainerWidgetState extends State<ContainerWidget> {
         width: widget.width,
         height: widget.height,
         decoration: ShapeDecoration(
-            color: Colors.green.shade50,
+            color: Colors.green.shade50.withAlpha(200),
             shape: RoundedRectangleBorder(
                 side: BorderSide(width: 1),
                 borderRadius: BorderRadiusGeometry.circular(20))),

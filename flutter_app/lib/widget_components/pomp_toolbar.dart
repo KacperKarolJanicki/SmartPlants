@@ -9,12 +9,20 @@ Map<String,dynamic> pumpsData = {};
 class PompToolbar extends StatefulWidget {
   final String pompLabel;
   final String pompID;
+  final Color backgroundColor;
+  final Color labelColor;
   final Widget? otherWidget;
   final bool functionButtons;
   final bool labelButton;
 
   const PompToolbar(
-      {super.key, this.pompLabel = 'Some Pomp', required this.pompID, this.otherWidget, this.functionButtons=true, this.labelButton=true});
+      {super.key, this.pompLabel = 'Some Pomp',
+        required this.pompID, this.otherWidget,
+        this.functionButtons = true,
+        this.labelButton = true,
+        this.backgroundColor = Colors.transparent,
+        this.labelColor = Colors.black
+      });
 
   @override
   State<PompToolbar> createState() => _PompToolbarState();
@@ -47,6 +55,7 @@ class _PompToolbarState extends State<PompToolbar> {
   Widget build(BuildContext context) {
     return Container(
         decoration: ShapeDecoration(
+          color: widget.backgroundColor,
             shape: RoundedRectangleBorder(side: BorderSide(width: 0.1),
                 borderRadius: BorderRadius.circular(10))),
         child: Column(children: [
@@ -113,7 +122,7 @@ class _PompToolbarState extends State<PompToolbar> {
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 10,
               children: [
-                _isLoadingData ? SizedBox.shrink() : Text(_labelText, textAlign: TextAlign.center),
+                _isLoadingData ? SizedBox.shrink() : Text(_labelText, textAlign: TextAlign.center, style: TextStyle(color: widget.labelColor)),
                 widget.functionButtons ? AppStyleButton(
                     buttonText: 'On', minSize: Size(30, 30),
                     fontSize: 10,

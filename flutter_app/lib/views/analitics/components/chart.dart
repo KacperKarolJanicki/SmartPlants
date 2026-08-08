@@ -20,29 +20,23 @@ class _ChartState extends State<Chart> {
   Widget build(BuildContext context) {
 
     double chartSize = MediaQuery.of(context).size.width / 1.3;
-    // double scaleSpacing = MediaQuery.of(context).size.height / 25;
 
     return PompToolbar(
       pompID: widget.sensor.replaceAll('sensor_voltage_', 'water_pomp_'),
       pompLabel: widget.sensor.replaceAll('sensor_voltage_', 'Pomp '),
       functionButtons: false,
-      otherWidget: Container(decoration: ShapeDecoration(color: Colors.blue.shade50,
+      backgroundColor: Colors.black.withAlpha(50),
+      labelColor: Colors.white,
+      otherWidget: Container(decoration: ShapeDecoration(color: Colors.white.withAlpha(200),
           shape: RoundedRectangleBorder(side: BorderSide(width: 0.3))),
           child: Column(children: [
             OverflowBar(children: [
-              // Column(
-              //     spacing: scaleSpacing,
-              //     children: [
-              //       Text('Wet'),
-              //       Text('Semi-Wet'),
-              //       Text('Dry'),
-              //     ]),
-              SizedBox(width: chartSize, child: SfSparkLineChart(
+              SizedBox(width: chartSize, child: SfSparkAreaChart(
                 labelDisplayMode: widget.lastResults == 6
                     ? SparkChartLabelDisplayMode.all
                     : SparkChartLabelDisplayMode.last,
-                width: 1,
                 axisLineColor: Colors.brown,
+                color: Colors.blue.withAlpha(70),
                 marker: SparkChartMarker(
                     displayMode: SparkChartMarkerDisplayMode.all),
                 data: <double>[
