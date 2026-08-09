@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     PompToolbar(
                         pompLabel: 'Pomp 1', pompID: 'water_pomp_1',
                         otherWidget: percentageLoading
-                            ? SizedBox.shrink()
+                            ? CircularProgressIndicator(color: Colors.green)
                             : PercentageToolbar(
                             voltageId: 'sensor_voltage_1',
                             stateId: 'sensor_1_ground')
@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     PompToolbar(
                         pompLabel: 'Pomp 2', pompID: 'water_pomp_2',
                         otherWidget: percentageLoading
-                            ? SizedBox.shrink()
+                            ? CircularProgressIndicator(color: Colors.green)
                             : PercentageToolbar(
                             voltageId: 'sensor_voltage_2',
                             stateId: 'sensor_2_ground')
@@ -96,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     PompToolbar(
                         pompLabel: 'Pomp 3', pompID: 'water_pomp_3',
                         otherWidget: percentageLoading
-                            ? SizedBox.shrink()
+                            ? CircularProgressIndicator(color: Colors.green)
                             : PercentageToolbar(
                             voltageId: 'sensor_voltage_3',
                             stateId: 'sensor_3_ground')),
@@ -104,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     PompToolbar(
                       pompLabel: 'Pomp 4', pompID: 'water_pomp_4',
                       otherWidget: percentageLoading
-                          ? SizedBox.shrink()
+                          ? CircularProgressIndicator(color: Colors.green)
                           : PercentageToolbar(
                           voltageId: 'sensor_voltage_4',
                           stateId: 'sensor_4_ground'),

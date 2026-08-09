@@ -20,28 +20,26 @@ class _AutomaticsState extends State<Automatics> {
     return ContainerWidget(
       height: MediaQuery.of(context).size.height / 1.75,
       width: MediaQuery.of(context).size.width-50,
-      scrollable: true,
       children: [
-        SizedBox(height: 10),
         Text('Automatics', textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
-        SizedBox(height: 10),
         PompToolbar(pompLabel: 'Pomp 1', pompID: 'water_pomp_1', labelButton: false),
-        SizedBox(height: 10),
         PompToolbar(pompLabel: 'Pomp 2', pompID: 'water_pomp_2', labelButton: false),
-        SizedBox(height: 10),
         PompToolbar(pompLabel: 'Pomp 3', pompID: 'water_pomp_3', labelButton: false),
-        SizedBox(height: 10),
         PompToolbar(pompLabel: 'Pomp 4', pompID: 'water_pomp_4', labelButton: false),
-        SizedBox(height: 10),
-        AppStyleButton(buttonText: 'Start', onPressed: (){
-          pumpsData.addAll({'turn_on':true});
-          backend.send('$host/automatics', '$host/automatics', headers: {'deviceIp':pumpDeviceIP}, data: pumpsData);
-          pumpsData.clear();
-        }),
-        AppStyleButton(buttonText: 'Stop', onPressed: (){
-          backend.send('$host/automatics', '$host/automatics', headers: {'deviceIp':pumpDeviceIP}, data: {'turn_on':false});
-          pumpsData.clear();
-        })
+        OverflowBar(
+            spacing: 20,
+            children: [
+          AppStyleButton(buttonText: 'Start', onPressed: (){
+            pumpsData.addAll({'turn_on':true});
+            backend.send('$host/automatics', '$host/automatics', headers: {'deviceIp':pumpDeviceIP}, data: pumpsData).whenComplete((){
+              pumpsData.clear();
+            });
+          }),
+          AppStyleButton(buttonText: 'Stop', onPressed: (){
+            backend.send('$host/automatics', '$host/automatics', headers: {'deviceIp':pumpDeviceIP}, data: {'turn_on':false});
+            pumpsData.clear();
+          })
+        ])
       ],
     );
   }

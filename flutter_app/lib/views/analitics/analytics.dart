@@ -54,7 +54,15 @@ class _AnalyticsState extends State<Analytics> {
                   spacing: 5,
                   children: [
                     Text('Results from:', style: TextStyle(fontSize: 18)),
-                    PopupMenuButton(itemBuilder: (context) =>
+                    PopupMenuButton(
+                        color: Colors.green.shade100.withAlpha(220),
+                        elevation: 20,
+                        position: PopupMenuPosition.under,
+                        popUpAnimationStyle: AnimationStyle(curve: Curves.linear),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide(width: 0.2)),
+                        itemBuilder: (context) =>
                     [
                       PopupMenuItem(onTap: () {
                         setState(() {
@@ -77,9 +85,7 @@ class _AnalyticsState extends State<Analytics> {
                             isLoading = false;
                           });
                         });
-                      },
-                          child: Row(spacing: 10,
-                              children: [Icon(Icons.refresh), Text('Refresh')]))
+                      }, child: Row(spacing: 10, children: [Icon(Icons.refresh), Text('Refresh')]))
                     ]),
                   ]),
               SizedBox(height: 10),
