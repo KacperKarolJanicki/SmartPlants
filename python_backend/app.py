@@ -39,6 +39,17 @@ def light():
         data = request.get_json()
         response = requests.post(device_ip, json=data)
         return "Ok"
+
+@app.route("/automatics", methods=["POST"])
+def automatics():
+    device_ip = request.headers.get('deviceIp')
+    data = request.get_json()
+    print(data)
+    try:
+        requests.post(f"{device_ip}/automatics", json=data)
+        return "Ok"
+    except Exception as e:
+        return e 
     
 @app.route("/plants_data", methods=["GET"])
 def plants_data():
