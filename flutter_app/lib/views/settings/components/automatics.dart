@@ -15,6 +15,37 @@ class Automatics extends StatefulWidget {
 
 class _AutomaticsState extends State<Automatics> {
 
+  bool turnOn = false;
+  bool stateLoading = false;
+
+  Future<void> automaticsState(bool turn, {Map<String, dynamic>? data}) async {
+    setState(() {
+      stateLoading = true;
+    });
+    if (turn) {
+      Map<String, dynamic> response = await backend.sendNReturn(
+          '$host/automatics', '$host/automatics',
+          headers: {'deviceIp': pumpDeviceIP}, data: data);
+      turnOn = response['turn_on'] ?? false;
+    } else {
+      Map<String, dynamic> response = await backend.download(
+          '$host/automatics', '$host/automatics',
+          headers: {'deviceIp': pumpDeviceIP});
+      turnOn = response['turn_on'] ?? false;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pumpsData.clear();
+    automaticsState(false).whenComplete((){
+      setState(() {
+        stateLoading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ContainerWidget(
@@ -22,23 +53,33 @@ class _AutomaticsState extends State<Automatics> {
       width: MediaQuery.of(context).size.width-50,
       children: [
         Text('Automatics', textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
-        PompToolbar(pompLabel: 'Pomp 1', pompID: 'water_pomp_1', labelButton: false),
-        PompToolbar(pompLabel: 'Pomp 2', pompID: 'water_pomp_2', labelButton: false),
-        PompToolbar(pompLabel: 'Pomp 3', pompID: 'water_pomp_3', labelButton: false),
-        PompToolbar(pompLabel: 'Pomp 4', pompID: 'water_pomp_4', labelButton: false),
+        stateLoading ? CircularProgressIndicator(color: Colors.green) : Column(children: [
+          PompToolbar(pompLabel: 'Pomp 1', pompID: 'water_pomp_1', labelButton: false),
+          PompToolbar(pompLabel: 'Pomp 2', pompID: 'water_pomp_2', labelButton: false),
+          PompToolbar(pompLabel: 'Pomp 3', pompID: 'water_pomp_3', labelButton: false),
+          PompToolbar(pompLabel: 'Pomp 4', pompID: 'water_pomp_4', labelButton: false),
+        ]),
         OverflowBar(
             spacing: 20,
             children: [
-          AppStyleButton(buttonText: 'Start', onPressed: (){
+              stateLoading ? SizedBox.shrink() : turnOn ?
+              AppStyleButton(buttonText: 'Stop', onPressed: (){
+                automaticsState(true, data: {"turn_on":false}).whenComplete((){
+                  setState(() {
+                    stateLoading = false;
+                    pumpsData.clear();
+                  });
+                });
+              }):
+              pumpsData.isNotEmpty ? AppStyleButton(buttonText: 'Start', onPressed: (){
             pumpsData.addAll({'turn_on':true});
-            backend.send('$host/automatics', '$host/automatics', headers: {'deviceIp':pumpDeviceIP}, data: pumpsData).whenComplete((){
-              pumpsData.clear();
+            automaticsState(true, data: pumpsData).whenComplete((){
+              setState(() {
+                stateLoading = false;
+                pumpsData.clear();
+              });
             });
-          }),
-          AppStyleButton(buttonText: 'Stop', onPressed: (){
-            backend.send('$host/automatics', '$host/automatics', headers: {'deviceIp':pumpDeviceIP}, data: {'turn_on':false});
-            pumpsData.clear();
-          })
+          }) : SizedBox.shrink()
         ])
       ],
     );
