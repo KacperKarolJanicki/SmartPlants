@@ -1,6 +1,7 @@
 import 'package:esp32_module/function_components/local_data_storage.dart';
 import 'package:esp32_module/widget_components/button.dart';
 import 'package:esp32_module/widget_components/container_widget.dart';
+import 'package:esp32_module/widget_components/lights_widget.dart';
 import 'package:esp32_module/widget_components/text_field.dart';
 import 'package:flutter/material.dart';
 import '../../../function_components/connection.dart';
@@ -12,6 +13,7 @@ Future<void> getIP() async {
   pumpDeviceIP = await LocalDataStorage('pump_ip').getData('');
   lightsDeviceIP = await LocalDataStorage('lights_ip').getData('');
   host = await LocalDataStorage('main_host').getData('');
+  lightsOn = bool.parse(await LocalDataStorage('lightsState').getData('light_off'));
 }
 
 class WirelessSettings extends StatefulWidget {

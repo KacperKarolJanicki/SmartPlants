@@ -2,10 +2,12 @@ import 'package:esp32_module/views/analitics/analytics.dart';
 import 'package:esp32_module/views/settings/components/wireless_settings.dart';
 import 'package:esp32_module/views/settings/settings.dart';
 import 'package:esp32_module/widget_components/app_style_scaffold.dart';
+import 'package:esp32_module/widget_components/lights_widget.dart';
 import 'package:esp32_module/widget_components/pomp_toolbar.dart';
 import 'package:esp32_module/widget_components/sensor_percentage_toolbar.dart';
 import 'package:flutter/material.dart';
 import 'package:backend_connection/backend_connection.dart';
+import 'function_components/local_data_storage.dart';
 import 'widget_components/container_widget.dart';
 import 'widget_components/button.dart';
 import 'function_components/connection.dart';
@@ -34,12 +36,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String connectionIconPath = '';
   bool percentageLoading = false;
-  bool light = false;
+  bool lightLoading = false;
 
   void connection() async {
     setState(() {
       isLoading = true;
+      lightLoading = true;
     });
+    if(lightsOn){
+    currentLightsState = await backend.download(
+        '$host/light',
+        '$host/light').whenComplete((){
+          setState(() {
+            lightLoading = false;
+          });
+    });}
     fromSensorsData = await backend.download('$host/ground_data', '$host/ground_data', headers: {'deviceIp':pumpDeviceIP}).whenComplete((){
       setState(() {
         isLoading = false;
@@ -58,10 +69,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return AppStyleScaffold(body: Center(
         child:
         Column(
-            spacing: 10,
+            spacing: 5,
             mainAxisAlignment: .center,
             children: [
-              Image.asset('assets/images/appBar.png',
+              lightLoading ? LightsOff() : currentLightsState == 'light_on' ?  lightsOn ? LightsOn() : LightsOff() : LightsOff(),
+              Image.asset('assets/images/$appBar',
                   width: MediaQuery
                       .of(context)
                       .size
@@ -72,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
               pumpDeviceIP
                   .replaceAll('http://', '')
                   .isNotEmpty ? ContainerWidget(
-                  width: 325, height: 525, scrollable: true,
+                  width: 325, height: 425, scrollable: true,
                   children: [
                     SizedBox(height: 10),
                     PompToolbar(
@@ -129,31 +141,49 @@ class _MyHomePageState extends State<MyHomePage> {
                               spacing: 10,
                               children: [
                                 OverflowBar(
+                                    alignment: MainAxisAlignment.center,
                                     spacing: 20,
                                     children: [
                                       AppStyleButton(onPressed: () {
-                                        backend.send(
-                                            '$host/light',
-                                            '$host/light',
-                                            data: {"turn_on": true},
-                                            headers: {
-                                              'deviceIP': lightsDeviceIP
-                                            });
-                                      },
-                                          buttonText: "On",
-                                          icon: Icon(Icons.lightbulb)),
+                                        if (lightsOn == false) {
+                                          setState(() {
+                                            lightsOn = true;
+                                          });
+                                          backend.send(
+                                              '$host/light',
+                                              '$host/light',
+                                              data: {"turn_on": true},
+                                              headers: {
+                                                'deviceIP': lightsDeviceIP,
+                                              });
+                                          LocalDataStorage('lightsState').setData(lightsOn.toString());
+                                        }
+                                      }, buttonText: "On", fontSize: 10, icon: Icon(Icons.lightbulb, size: 10)),
                                       AppStyleButton(onPressed: () {
+                                        setState(() {
+                                          lightsOn = false;
+                                        });
                                         backend.send(
                                             '$host/light',
                                             '$host/light',
                                             data: {"turn_on": false},
                                             headers: {
-                                              'deviceIP': lightsDeviceIP
+                                              'deviceIP': lightsDeviceIP,
                                             });
-                                      },
-                                          buttonText: "Off",
-                                          icon: Icon(
-                                              Icons.lightbulb_outline)),
+                                        LocalDataStorage('lightsState').setData(lightsOn.toString());
+                                      }, buttonText: "Off", fontSize: 10, icon: Icon(Icons.lightbulb_outline, size: 10)),
+                                      AppStyleButton(onPressed: () async {
+                                        setState(() {
+                                          lightLoading = true;
+                                        });
+                                        currentLightsState = await backend.download(
+                                            '$host/light',
+                                            '$host/light').whenComplete((){
+                                              setState(() {
+                                                lightLoading = false;
+                                              });
+                                        });
+                                      }, buttonText: "Refresh", fontSize: 10, icon: Icon(Icons.refresh, size: 10)),
                                     ]),
                                 OverflowBar(
                                     spacing: 10,
